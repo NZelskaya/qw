@@ -5,7 +5,7 @@ import pl.b2b.net.b2b.testfactory.BaseTF;
 import pl.b2b.net.b2b.testfactory.TestFactorySteps;
 
 public class DemoTest {
-    @Test
+//    @Test
     public void test() throws Exception {
         BaseTF.setUp("FF");
         TestFactorySteps testFactorySteps = new TestFactorySteps();
