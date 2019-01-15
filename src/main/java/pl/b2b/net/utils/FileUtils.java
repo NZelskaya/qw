@@ -1,5 +1,8 @@
 package pl.b2b.net.utils;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,10 +18,19 @@ public class FileUtils {
 
     public static String getResourceFilePath(String fileName) throws IOException {
         Path resourcePath = getTempResourcePath(fileName);
+
+        String filePassString = resourcePath.toString();
+        System.out.println("Looking for a file " + filePassString);
+
         if (Files.notExists(resourcePath)) {
+            System.out.println(String.format("File %s wasn't found. Starting copying file", filePassString));
+
             return unpackResourceFile(fileName).toString();
         }
-        return resourcePath.toString();
+
+        System.out.println(String.format("File %s was found. No actions performed for creating it", filePassString));
+
+        return filePassString;
     }
 
     static InputStream getResourceFile(String resource) {
@@ -28,27 +40,47 @@ public class FileUtils {
     }
 
     private static Path unpackResourceFile(String resource) throws IOException {
+        System.out.println("Starting unpacking resource file " + resource);
         ClassLoader classLoader = FileUtils.class.getClassLoader();
 
         InputStream inputStream = classLoader.getResourceAsStream(resource);
 
-        if (!Files.exists(getResourcesTempDir())) {
-            getResourcesTempDir().toFile().mkdirs();
+        Path resourcesTempDirPath = getResourcesTempDir();
+
+        System.out.println(resourcesTempDirPath + " - checking whether temp directory exists");
+
+        if (!Files.exists(resourcesTempDirPath)) {
+            System.out.println(String.format("Directory %s wasn't found. Starting creation", resourcesTempDirPath));
+
+            resourcesTempDirPath.toFile().mkdirs();
         }
 
+        System.out.println(resourcesTempDirPath + " - temp directory was found.");
+
         Path targetPath = getTempResourcePath(resource);
+
+        System.out.println(String.format("Starting copying resource file %s to directory %s", resource, targetPath));
         Files.copy(inputStream, targetPath);
+
+        System.out.println(String.format("File %s was copied to directory %s", resource, targetPath));
+
         return targetPath;
     }
 
     public static boolean cleanExecutablesTmpDir() {
         try {
-            Files.walk(getResourcesTempDir())
-                    .sorted(Comparator.reverseOrder())
-                    .forEach(FileUtils::delete);
+            Path resourcesTempDir = getResourcesTempDir();
+            System.out.println("Starting cleaning folder " + resourcesTempDir);
+            if (Files.exists(resourcesTempDir)) {
+                System.out.println(String.format("Path %s exists. Starting cleanup", resourcesTempDir));
+                Files.walk(resourcesTempDir)
+                        .sorted(Comparator.reverseOrder())
+                        .forEach(FileUtils::delete);
+            }
+            System.out.println("Folder cleanup finished : " + resourcesTempDir);
             return true;
         } catch (IOException e) {
-            // add logger
+            System.out.println("Error occurred during resource temp dir clean up " + e.getMessage());
             return false;
         }
     }
@@ -57,7 +89,7 @@ public class FileUtils {
         try {
             Files.delete(path);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Something went wrong during file deletion. Execution would be continued ignoring exception :" + ExceptionUtils.getStackTrace(e));
         }
     }
 
@@ -67,6 +99,14 @@ public class FileUtils {
 
     private static Path getResourcesTempDir() {
         String tmpDirPath = System.getProperty(TMP_DIR_PROPERTY);
+
+        System.out.println("Actual system temp dir pass = " + tmpDirPath);
+
+//        //TODO temporary solution
+//        tmpDirPath = "c:\\tf\\tmp\\";
+
+        System.out.println("Used temp dir pass = " + tmpDirPath);
+
         return Paths.get(tmpDirPath, RESOURCES_TMP_DIR);
     }
 
@@ -85,13 +125,13 @@ public class FileUtils {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Something went wrong during reading file" + ExceptionUtils.getStackTrace(e));
         } finally {
             if (br != null) {
                 try {
                     br.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println("Something went wrong during closing file" + ExceptionUtils.getStackTrace(e));
                 }
             }
         }

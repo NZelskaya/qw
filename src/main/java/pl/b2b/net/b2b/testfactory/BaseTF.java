@@ -13,7 +13,7 @@ public class BaseTF {
     @TestFactoryMethod(value = "Start", description = "Open browser. For FireFox enter FF", group = "Configuration")
     @Parameters({"driver"})
     public static void setUp(String driver) throws Exception {
-        DriverSetup.setDriver(driver, true);
+        DriverSetup.setDriver(driver);
     }
 
     @Test

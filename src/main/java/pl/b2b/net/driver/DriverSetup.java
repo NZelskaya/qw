@@ -1,5 +1,6 @@
 package pl.b2b.net.driver;
 
+import org.apache.log4j.Logger;
 import pl.b2b.net.utils.FileUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -14,19 +15,22 @@ import static pl.b2b.net.utils.FileUtils.getResourceFilePath;
 public class DriverSetup {
     private static WebDriver driver;
 
-    static {
-        if (FileUtils.cleanExecutablesTmpDir()) {
-            System.out.println("Temp resources folder cleaned up");
-        } else {
-            System.err.println("Temp resources folder was NOT removed");
-        }
-    }
+//    static {
+//        if (FileUtils.cleanExecutablesTmpDir()) {
+//            LOGGER.info("Temp resources folder cleaned up");
+//        } else {
+//            LOGGER.info("Temp resources folder was NOT removed");
+//        }
+//    }
 
     private static void prepareSystemPropertyForBrowser(BrowserEnum browserEnum) throws IOException {
+        System.out.println("Preparing system for launching browser : " + browserEnum.toString());
         String systemProperty = browserEnum.getSystemProperty();
         String executableFile = browserEnum.getExecutableFile();
 
+        System.out.println("Checking system property : " + systemProperty);
         if (System.getProperty(systemProperty) == null) {
+            System.out.println(String.format("System property %s is null. System property setup started", systemProperty));
             String resourceFilePath = getResourceFilePath(executableFile);
             System.setProperty(systemProperty, resourceFilePath);
             System.out.println(systemProperty + " was set as = " + resourceFilePath);
@@ -37,7 +41,8 @@ public class DriverSetup {
         try {
             if (driver == null) {
                 BrowserEnum browserEnum = BrowserEnum.valueOf(browser);
-                prepareSystemPropertyForBrowser(browserEnum);
+                //prepareSystemPropertyForBrowser(browserEnum);
+                System.setProperty(browserEnum.getSystemProperty(), "c:\\tf\\tmp\\webdriver-resources");
                 switch (browserEnum) {
                     case CHROME:
                         System.out.println("Launching Google Chrome ...");
@@ -52,7 +57,7 @@ public class DriverSetup {
                         break;
 
                     default:
-                        System.err.println("Invalid browser getSelectorType specified.");
+                        System.out.println("Invalid browser getSelectorType specified.");
                         throw new IllegalArgumentException("NO BROWSER DEFINED");
                 }
 
@@ -74,15 +79,22 @@ public class DriverSetup {
     public static void close(WebDriver driverInstance) {
         System.out.println("Closing browser ...");
         driverInstance.quit();
+        driver = null;
     }
 
     public static WebDriver getDriver() {
         return driver;
     }
 
-    public static void setDriver(String browser, boolean setDriverInstanceNull) throws Exception {
-        if (setDriverInstanceNull)
-            driver = null;
+    public static void setDriver(String browser) throws Exception {
+        System.out.println("Driver was set to = " + browser);
+
+        if (FileUtils.cleanExecutablesTmpDir()) {
+            System.out.println("Temp resources folder cleaned up");
+        } else {
+            System.out.println("Temp resources folder was NOT removed");
+        }
+
         createDriver(browser);
     }
 }
