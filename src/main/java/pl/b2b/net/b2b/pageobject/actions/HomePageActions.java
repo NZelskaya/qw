@@ -25,4 +25,9 @@ public class HomePageActions extends HomePage {
         click(jobOffersLink);
         waitForPageLoadComplete();
     }
+
+    public void goToContactUs(){
+        click(contactUsLink);
+        waitForPageLoadComplete();
+    }
 }

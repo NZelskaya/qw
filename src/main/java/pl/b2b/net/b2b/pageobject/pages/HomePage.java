@@ -14,4 +14,7 @@ public class HomePage extends AbstractPageObject {
 
     @FindBy(css = "#menu-menu-header a[href*='oferty-pracy']")
     protected WebElement jobOffersLink;
+
+    @FindBy(css = "#menu-menu-header a[href*='kontakt']")
+    protected WebElement contactUsLink;
 }

@@ -6,7 +6,7 @@ import pl.b2b.net.b2b.testfactory.TestFactorySteps;
 
 public class DemoTest {
 //    @Test
-    public void test() throws Exception {
+    public void test1() throws Exception {
         BaseTF.setUp("FF");
         TestFactorySteps testFactorySteps = new TestFactorySteps();
         testFactorySteps.setUp();
@@ -23,6 +23,19 @@ public class DemoTest {
         testFactorySteps.openJobOfferByIndex(0);
         testFactorySteps.setUp();
         testFactorySteps.verifySelectedOffersPage();
+        BaseTF.tearDown();
+    }
+
+//    @Test
+    public void test2() throws Exception {
+        BaseTF.setUp("FF");
+        TestFactorySteps testFactorySteps = new TestFactorySteps();
+        testFactorySteps.setUp();
+        testFactorySteps.openHomePage();
+        testFactorySteps.setUp();
+        testFactorySteps.navigateToContactUs();
+        testFactorySteps.setUp();
+        testFactorySteps.typePhoneNumber("000000000");
         BaseTF.tearDown();
     }
 }

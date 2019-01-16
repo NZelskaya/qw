@@ -51,6 +51,8 @@ public abstract class AbstractPageObject {
         wait.until(driver1 -> String
                 .valueOf(((JavascriptExecutor) driver1).executeScript("return document.readyState"))
                 .equals("complete"));
+
+        waitForElementToBeVisible(getLogo());
     }
 
     protected void waitForPageLoadComplete(String urlRegex) {

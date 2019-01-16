@@ -1,23 +1,22 @@
 package pl.b2b.net.b2b.testfactory;
 
 import org.openqa.selenium.WebDriver;
-import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import pl.b2b.net.b2b.pageobject.actions.ContactUsPageActions;
 import pl.b2b.net.b2b.pageobject.actions.HomePageActions;
 import pl.b2b.net.b2b.pageobject.actions.JobOffersPageActions;
 import pl.b2b.net.b2b.pageobject.actions.PositionPageActions;
 
 import pl.b2b.net.driver.DriverSetup;
-import pl.b2b.testfactory.TestFactoryUtils;
 import pl.b2b.testfactory.annotations.TestFactoryMethod;
 
 public class TestFactorySteps extends BaseTF {
     private HomePageActions homePage;
     private JobOffersPageActions jobOffersPage;
     private PositionPageActions positionPage;
+    private ContactUsPageActions contactUsPage;
 
     @BeforeMethod
     public void setUp() {
@@ -25,6 +24,7 @@ public class TestFactorySteps extends BaseTF {
         homePage = new HomePageActions(driver);
         jobOffersPage = new JobOffersPageActions(driver);
         positionPage = new PositionPageActions(driver);
+        contactUsPage = new ContactUsPageActions(driver);
     }
 
     @Test
@@ -43,6 +43,19 @@ public class TestFactorySteps extends BaseTF {
     @TestFactoryMethod(value = "Navigate to Job Offers", description = "Click at 'Oferty pracy' and wait till page load ends", group = "Home page")
     public void navigateToJobOffers() {
         homePage.goToJobOffers();
+    }
+
+    @Test
+    @TestFactoryMethod(value = "Navigate to Contact Us", description = "Click at 'Kontakt' and wait till page load ends", group = "Home page")
+    public void navigateToContactUs() {
+        homePage.goToContactUs();
+    }
+
+    @Test
+    @TestFactoryMethod(value = "Navigate to Contact Us", description = "Click at 'Kontakt' and wait till page load ends", group = "Home page")
+    @Parameters({"message"})
+    public void typePhoneNumber(String message) throws Exception {
+        contactUsPage.enterPhoneNumber(message);
     }
 
     @Test
