@@ -52,7 +52,7 @@ public class TestFactorySteps extends BaseTF {
     }
 
     @Test
-    @TestFactoryMethod(value = "Enter phone number", description = "Click at 'Kontakt' and wait till page load ends", group = "Contact Us")
+    @TestFactoryMethod(value = "Enter phone number", description = "Enter 'Telefon' and verify entered data", group = "Contact Us")
     @Parameters({"phoneNumber"})
     public void typePhoneNumber(String phoneNumber) throws Exception {
         contactUsPage.enterPhoneNumber(phoneNumber);
