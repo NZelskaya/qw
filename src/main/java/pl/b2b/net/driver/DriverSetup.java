@@ -13,6 +13,7 @@ import static pl.b2b.net.GlobalDefinitions.*;
 import static pl.b2b.net.utils.FileUtils.getResourceFilePath;
 
 public class DriverSetup {
+    public static final String WEBDRIVER_RESOURCES = "c:\\tf\\tmp\\webdriver-resources\\";
     private static WebDriver driver;
 
 //    static {
@@ -37,12 +38,12 @@ public class DriverSetup {
         }
     }
 
-    public static WebDriver createDriver(String browser) throws IOException {
+    public static WebDriver createDriver(String browser) {
         try {
             if (driver == null) {
                 BrowserEnum browserEnum = BrowserEnum.valueOf(browser);
-                //prepareSystemPropertyForBrowser(browserEnum);
-                System.setProperty(browserEnum.getSystemProperty(), "c:\\tf\\tmp\\webdriver-resources");
+
+                System.setProperty(browserEnum.getSystemProperty(), WEBDRIVER_RESOURCES + browserEnum.getExecutableFile());
                 switch (browserEnum) {
                     case CHROME:
                         System.out.println("Launching Google Chrome ...");
