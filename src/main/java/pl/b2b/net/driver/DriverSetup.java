@@ -54,7 +54,9 @@ public class DriverSetup {
     public static void close(WebDriver driverInstance) {
         System.out.println("Closing browser ...");
         driverInstance.quit();
+        System.out.println("Driver quit complete");
         driver = null;
+        System.out.println("Driver instance set as null");
     }
 
     public static WebDriver getDriver() {
