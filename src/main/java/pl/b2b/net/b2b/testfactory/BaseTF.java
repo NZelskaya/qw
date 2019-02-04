@@ -14,8 +14,6 @@ public class BaseTF {
     @Parameters({"driver"})
     public static void setUp(String driver) throws Exception {
         DriverSetup.setDriver(driver);
-        System.out.println("Setting java.awt.headless ");
-        System.setProperty("java.awt.headless", "false");
     }
 
     @Test
